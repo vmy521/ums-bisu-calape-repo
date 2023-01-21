@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1061060946412",
+    "project_id": "ums-bisucalapelibrary",
+    "storage_bucket": "ums-bisucalapelibrary.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061060946412:android:94d4ec14c1119c5a23b8c9",
+        "android_client_info": {
+          "package_name": "com.bisu.ums_bisucalapelibrary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061060946412-531oomj64apk2nj2f4af7d5iu91ce1n4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhxxKV_sLxn7aL4BHWb07H13hPkulDVXI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1061060946412-531oomj64apk2nj2f4af7d5iu91ce1n4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">UMS - BISU Calape Library</string>
+    <string name="ums">User Monitoring System</string>
+    <string name="library">BISU Calape Library</string>
+    <string name="forgot_pword_ins">A password reset link will be sent to your email. If the link is not visible in your inbox folder, check your spam folder</string>
+    <string name="create_acct_ins">Make sure the email address you enter was already registered. Only registered email address can create an account</string>
+
+    <!--  For drawer accessibility  -->
+    <string name="nav_open_drawer">Open navigation drawer</string>
+    <string name="nav_close_drawer">Close navigation drawer</string>
+
+    <!--  Activity  -->
+    <string name="activity_forgot_pword">Forgot Password?</string>
+    <string name="activity_create_acct">Create Account</string>
+    <string name="activity_my_acct">My Account</string>
+    <string name="activity_enroll_face">Enroll Face</string>
+    <string name="activity_add_user">Add User</string>
+    <string name="activity_edit_user">Edit User</string>
+    <string name="activity_recognition">Face Recognition</string>
+
+    <!--  Fragment  -->
+    <string name="fragment_dashboard">Dashboard</string>
+    <string name="fragment_recognition">Recognition</string>
+    <string name="fragment_monitoring">Monitoring</string>
+    <string name="fragment_profiling">Profiling</string>
+    <string name="fragment_report">Report</string>
+
+    <!--  Drawer Menu  -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_recognition">Recognition</string>
+    <string name="nav_monitoring">Monitoring</string>
+    <string name="nav_profiling">Profiling</string>
+    <string name="nav_report">Report</string>
+    <string name="nav_logout">Logout</string>
+
+    <!-- Menu -->
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="delete_all">Delete All</string>
+    <string name="select_all">Select All</string>
+    <string name="purpose_visit">Purpose of Visit</string>
+    <string name="change_pass">Change Password</string>
+    <string name="change_email">Change Email</string>
+    <string name="logout">Logout</string>
+
+    <!--  Course  -->
+    <string-array name="course">
+        <item>BEED</item>
+        <item>BSED</item>
+        <item>BSIT ELECT TECH</item>
+        <item>BSIT FPST</item>
+        <item>BSCS</item>
+        <item>BSF</item>
+        <item>MIDWIFERY</item>
+    </string-array>
+
+    <!--  Purpose of Visit  -->
+    <string-array name="purpose_visit">
+        <item>To borrow and return books</item>
+        <item>To read journals/periodicals</item>
+        <item>To consult reference books</item>
+        <item>To read general books</item>
+        <item>To complete assignments</item>
+        <item>To prepare for next class</item>
+        <item>To chat with friends</item>
+        <item>To consult research materials</item>
+        <item>Any others</item>
+    </string-array>
+
+    <!--  Group By  -->
+    <string-array name="group_by">
+        <item>By Gender</item>
+        <item>By Age</item>
+        <item>By Course</item>
+        <item>By Purpose of Visit</item>
+    </string-array>
+
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

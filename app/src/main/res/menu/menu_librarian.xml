@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_dashboard"
+            android:title="@string/nav_dashboard"
+            android:icon="@drawable/dashboard"
+            android:checked="true"
+            android:orderInCategory="1"
+            app:showAsAction="withText"/>
+
+        <item android:id="@+id/nav_recognition"
+            android:title="@string/nav_recognition"
+            android:icon="@drawable/recognition"
+            android:orderInCategory="2"
+            app:showAsAction="withText"/>
+
+        <item android:id="@+id/nav_monitoring"
+            android:title="@string/nav_monitoring"
+            android:icon="@drawable/monitoring"
+            android:orderInCategory="3"
+            app:showAsAction="withText"/>
+
+        <item android:id="@+id/nav_profiling"
+            android:title="@string/nav_profiling"
+            android:icon="@drawable/profiling"
+            android:orderInCategory="4"
+            app:showAsAction="withText"/>
+
+        <item android:id="@+id/nav_report"
+            android:title="@string/nav_report"
+            android:icon="@drawable/report"
+            android:orderInCategory="5"
+            app:showAsAction="withText"/>
+
+        <item android:id="@+id/nav_logout"
+            android:title="@string/nav_logout"
+            android:icon="@drawable/logout"
+            android:orderInCategory="6"
+            app:showAsAction="withText"/>
+    </group>
+</menu>
