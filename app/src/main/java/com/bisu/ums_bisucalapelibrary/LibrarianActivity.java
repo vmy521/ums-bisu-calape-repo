@@ -23,9 +23,14 @@ import com.bisu.ums_bisucalapelibrary.fragment.MonitoringFragment;
 import com.bisu.ums_bisucalapelibrary.fragment.ProfilingFragment;
 import com.bisu.ums_bisucalapelibrary.fragment.RecognitionFragment;
 import com.bisu.ums_bisucalapelibrary.fragment.ReportFragment;
+import com.bisu.ums_bisucalapelibrary.model.Librarian;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,6 +42,7 @@ public class LibrarianActivity extends AppCompatActivity implements NavigationVi
     private ProgressDialog progressDialog;
     private FirebaseAuth auth;
     private Helper helper;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,7 @@ public class LibrarianActivity extends AppCompatActivity implements NavigationVi
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         helper = new Helper(this);
 
@@ -81,13 +88,28 @@ public class LibrarianActivity extends AppCompatActivity implements NavigationVi
         TextView tv_fullname = view.findViewById(R.id.tv_fullname);
         TextView tv_uname = view.findViewById(R.id.tv_uname);
 
-        Glide.with(getApplicationContext())
-                .load(helper.getPhotoUrl())
-                .centerCrop()
-                .placeholder(R.drawable.person)
-                .into(civ_photo);
-        tv_fullname.setText(helper.getFullName());
-        tv_uname.setText(helper.getUsername());
+        db.collection("Librarian")
+                        .document(helper.getId()).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(!task.isSuccessful()){
+                                    Toast.makeText(LibrarianActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                DocumentSnapshot document = task.getResult();
+                                Librarian librarian = document.toObject(Librarian.class);
+
+                                Glide.with(getApplicationContext())
+                                        .load(librarian.getPhotoUrl())
+                                        .centerCrop()
+                                        .placeholder(R.drawable.person)
+                                        .into(civ_photo);
+                                tv_fullname.setText(librarian.getFullName());
+                                tv_uname.setText(librarian.getUsername());
+                            }
+                        });
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
