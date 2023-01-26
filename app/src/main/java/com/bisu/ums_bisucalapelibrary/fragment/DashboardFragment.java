@@ -2,6 +2,8 @@ package com.bisu.ums_bisucalapelibrary.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +28,16 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -115,11 +119,36 @@ public class DashboardFragment extends Fragment {
         purpose_PieEntryList = new ArrayList<>();
 
         tv_date.setText(helper.formatDate(LocalDate.now().toString()));
-        setTotalUsers();
-        setMonitoringByGender();
-        setMonitoringByAge();
-        setMonitoringByCourse();
-        setMonitoringByPurposeVisit();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                setTotalUsers();
+            }
+        });
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                setMonitoringByGender();
+            }
+        });
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                setMonitoringByAge();
+            }
+        });
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                setMonitoringByCourse();
+            }
+        });
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                setMonitoringByPurposeVisit();
+            }
+        });
     }
 
     private void setTotalUsers() {
@@ -196,8 +225,8 @@ public class DashboardFragment extends Fragment {
                 l.setYOffset(-25);
 
                 gender_pieEntryList.clear();
-                gender_pieEntryList.add(new PieEntry(maleSnapshot.size(), "Male"));
-                gender_pieEntryList.add(new PieEntry(femaleSnapshot.size(), "Female"));
+                gender_pieEntryList.add(new PieEntry(removeDuplicates(maleSnapshot.toObjects(Monitoring.class)).size(), "Male"));
+                gender_pieEntryList.add(new PieEntry(removeDuplicates(femaleSnapshot.toObjects(Monitoring.class)).size(), "Female"));
 
                 PieDataSet pieDataSet = new PieDataSet(gender_pieEntryList, "");
                 pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -225,6 +254,18 @@ public class DashboardFragment extends Fragment {
         });
     }
 
+    private List<Monitoring> removeDuplicates(List<Monitoring> monitoringList) {
+        List<Monitoring> finalMonitoringList = monitoringList.stream()
+                .collect(Collectors.groupingBy(Monitoring::getUserId,
+                        Collectors.maxBy(Comparator.comparing(Monitoring::getUserId))))
+                .values()
+                .stream()
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        return finalMonitoringList;
+    }
+
     private void setMonitoringByAge() {
         Query query = db.collection("Monitoring")
                 .whereGreaterThanOrEqualTo("timeIn", helper.getStartDate(LocalDate.now()));
@@ -236,7 +277,9 @@ public class DashboardFragment extends Fragment {
                     return;
                 }
 
-                total = task.getResult().size();
+                List<Monitoring> monitoringList = removeDuplicates(task.getResult().toObjects(Monitoring.class));
+
+                total = removeDuplicates(monitoringList).size();
                 LocalDate minDOB20 = helper.findMinDOBOfAge(20);
                 LocalDate minDOB18 = helper.findMinDOBOfAge(18);
                 LocalDate minDOB23 = helper.findMinDOBOfAge(23);
@@ -244,9 +287,7 @@ public class DashboardFragment extends Fragment {
                 LocalDate minDOB26 = helper.findMinDOBOfAge(26);
                 LocalDate minDOB24 = helper.findMinDOBOfAge(24);
 
-                for(DocumentSnapshot document : task.getResult()){
-                    Monitoring monitoring = document.toObject(Monitoring.class);
-
+                for(Monitoring monitoring : monitoringList){
                     LocalDate dob = LocalDate.parse(monitoring.getBdate());
 
                     if(dob.isAfter(minDOB20) && dob.isBefore(minDOB18)){
@@ -397,14 +438,14 @@ public class DashboardFragment extends Fragment {
                     return;
                 }
 
-                QuerySnapshot totalSnapshot = (QuerySnapshot) task.getResult().get(0);
-                QuerySnapshot beedSnapshot = (QuerySnapshot) task.getResult().get(1);
-                QuerySnapshot bsedSnapshot = (QuerySnapshot) task.getResult().get(2);
-                QuerySnapshot bsitFPSTSnapshot = (QuerySnapshot) task.getResult().get(3);
-                QuerySnapshot bsitETSnapshot = (QuerySnapshot) task.getResult().get(4);
-                QuerySnapshot bscsSnapshot = (QuerySnapshot) task.getResult().get(5);
-                QuerySnapshot bsfSnapshot = (QuerySnapshot) task.getResult().get(6);
-                QuerySnapshot midwiferySnapshot = (QuerySnapshot) task.getResult().get(7);
+                int totalSnapshot = removeDuplicates(((QuerySnapshot) task.getResult().get(0)).toObjects(Monitoring.class)).size();
+                int beedSnapshot = removeDuplicates(((QuerySnapshot) task.getResult().get(1)).toObjects(Monitoring.class)).size();
+                int bsedSnapshot = removeDuplicates(((QuerySnapshot) task.getResult().get(2)).toObjects(Monitoring.class)).size();
+                int bsitFPSTSnapshot = removeDuplicates(((QuerySnapshot) task.getResult().get(3)).toObjects(Monitoring.class)).size();
+                int bsitETSnapshot = removeDuplicates(((QuerySnapshot) task.getResult().get(4)).toObjects(Monitoring.class)).size();
+                int bscsSnapshot = removeDuplicates(((QuerySnapshot) task.getResult().get(5)).toObjects(Monitoring.class)).size();
+                int bsfSnapshot = removeDuplicates(((QuerySnapshot) task.getResult().get(6)).toObjects(Monitoring.class)).size();
+                int midwiferySnapshot = removeDuplicates(((QuerySnapshot) task.getResult().get(7)).toObjects(Monitoring.class)).size();
 
                 course_pie_chart.setDrawHoleEnabled(true);
                 //pie_chart.setUsePercentValues(true);
@@ -426,13 +467,13 @@ public class DashboardFragment extends Fragment {
                 l.setYOffset(-25);
 
                 course_PieEntryList.clear();
-                course_PieEntryList.add(new PieEntry(beedSnapshot.size(), "BEED"));
-                course_PieEntryList.add(new PieEntry(bsedSnapshot.size(), "BSED"));
-                course_PieEntryList.add(new PieEntry(bsitETSnapshot.size(), "BSIT ELECT TECH"));
-                course_PieEntryList.add(new PieEntry(bsitFPSTSnapshot.size(), "BSIT FPST"));
-                course_PieEntryList.add(new PieEntry(bscsSnapshot.size(), "BSCS"));
-                course_PieEntryList.add(new PieEntry(bsfSnapshot.size(), "BSF"));
-                course_PieEntryList.add(new PieEntry(midwiferySnapshot.size(), "MIDWIFERY"));
+                course_PieEntryList.add(new PieEntry(beedSnapshot, "BEED"));
+                course_PieEntryList.add(new PieEntry(bsedSnapshot, "BSED"));
+                course_PieEntryList.add(new PieEntry(bsitETSnapshot, "BSIT ELECT TECH"));
+                course_PieEntryList.add(new PieEntry(bsitFPSTSnapshot, "BSIT FPST"));
+                course_PieEntryList.add(new PieEntry(bscsSnapshot, "BSCS"));
+                course_PieEntryList.add(new PieEntry(bsfSnapshot, "BSF"));
+                course_PieEntryList.add(new PieEntry(midwiferySnapshot, "MIDWIFERY"));
 
                 PieDataSet pieDataSet = new PieDataSet(course_PieEntryList, "");
                 int[] colors = new int[10];
