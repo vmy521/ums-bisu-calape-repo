@@ -2,6 +2,7 @@ package com.bisu.ums_bisucalapelibrary.fragment;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -274,6 +275,12 @@ public class MonitoringFragment extends Fragment {
         dialog.create();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                dialog_search = "";
+            }
+        });
     }
 
     private void getAllMonitoringData() {
