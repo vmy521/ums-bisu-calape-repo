@@ -274,7 +274,7 @@ public class ReportFragment extends Fragment {
                 }
 
                 //Export xls
-                String folderName = "UMS Report";
+                String folderName = "UMS/Report";
                 String fileName = helper.getNumberDate(LocalDate.now().toString()) + ".xls";
                 String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + folderName + "/" + fileName;
 

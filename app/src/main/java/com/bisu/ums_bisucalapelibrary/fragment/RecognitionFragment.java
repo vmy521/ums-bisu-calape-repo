@@ -174,7 +174,7 @@ public class RecognitionFragment extends Fragment {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 if(!menu.hasVisibleItems()){
-                    menuInflater.inflate(R.menu.menu_recognition, menu);
+                    menuInflater.inflate(R.menu.menu_search, menu);
                 }
 
                 MenuItem menuItem = menu.findItem(R.id.search);

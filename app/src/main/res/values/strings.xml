@@ -44,6 +44,7 @@
     <string name="change_pass">Change Password</string>
     <string name="change_email">Change Email</string>
     <string name="logout">Logout</string>
+    <string name="export">Export</string>
 
     <!--  Course  -->
     <string-array name="course">
