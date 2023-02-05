@@ -128,21 +128,29 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.View
                                                                     }
                                                                 }
 
-                                                                writeBatch.commit()
-                                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                            @Override
-                                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                                progressDialog.dismiss();
+                                                                if(helper.isConnected()) {
+                                                                    writeBatch.commit()
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                    progressDialog.dismiss();
 
-                                                                                if(task.isSuccessful()){
-                                                                                    counter=0;
-                                                                                    Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
-                                                                                    notifyDataSetChanged();
-                                                                                }else{
-                                                                                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                    if(task.isSuccessful()){
+                                                                                        counter=0;
+                                                                                        Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                                                                                        notifyDataSetChanged();
+                                                                                    }else{
+                                                                                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                    }
                                                                                 }
-                                                                            }
-                                                                        });
+                                                                            });
+                                                                } else {
+                                                                    progressDialog.dismiss();
+                                                                    writeBatch.commit();
+                                                                    counter=0;
+                                                                    Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                                                                    notifyDataSetChanged();
+                                                                }
                                                             }
                                                         });
                                             }
@@ -246,22 +254,31 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.View
                                                     }
                                                 }
 
-                                                writeBatch.commit()
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                progressDialog.dismiss();
+                                                if(helper.isConnected()) {
+                                                    writeBatch.commit()
+                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    progressDialog.dismiss();
 
-                                                                if(task.isSuccessful()){
-                                                                    counter = 0;
-                                                                    Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
-                                                                    notifyDataSetChanged();
-                                                                    dialog.dismiss();
-                                                                }else{
-                                                                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    if(task.isSuccessful()){
+                                                                        counter = 0;
+                                                                        Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                                                                        notifyDataSetChanged();
+                                                                        dialog.dismiss();
+                                                                    }else{
+                                                                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    }
                                                                 }
-                                                            }
-                                                        });
+                                                            });
+                                                } else {
+                                                    progressDialog.dismiss();
+                                                    writeBatch.commit();
+                                                    counter = 0;
+                                                    Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                                                    notifyDataSetChanged();
+                                                    dialog.dismiss();
+                                                }
                                             }
                                         });
                             }

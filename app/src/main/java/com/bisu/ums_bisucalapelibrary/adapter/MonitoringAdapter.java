@@ -113,20 +113,27 @@ public class MonitoringAdapter extends FirestoreRecyclerAdapter<Monitoring, Moni
                                 progressDialog.create();
                                 progressDialog.show();
 
-                                db.collection("Monitoring").document(model.getId()).delete()
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                progressDialog.dismiss();
+                                if(helper.isConnected()) {
+                                    db.collection("Monitoring").document(model.getId()).delete()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    progressDialog.dismiss();
 
-                                                if(task.isSuccessful()){
-                                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
-                                                    notifyDataSetChanged();
-                                                }else{
-                                                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                                                        notifyDataSetChanged();
+                                                    }else{
+                                                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
+                                } else {
+                                    progressDialog.dismiss();
+                                    db.collection("Monitoring").document(model.getId()).delete();
+                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                                    notifyDataSetChanged();
+                                }
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -192,28 +199,43 @@ public class MonitoringAdapter extends FirestoreRecyclerAdapter<Monitoring, Moni
                                                         }
                                                     }
 
-                                                    writeBatch.commit()
-                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-                                                                    progressDialog.dismiss();
+                                                    if(helper.isConnected()) {
+                                                        writeBatch.commit()
+                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        progressDialog.dismiss();
 
-                                                                    if(task.isSuccessful()){
-                                                                        Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
-                                                                        counter = 0;
-                                                                        selectList.clear();
+                                                                        if(task.isSuccessful()){
+                                                                            Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                                                                            counter = 0;
+                                                                            selectList.clear();
 
-                                                                        if(getSnapshots().size() < 1){
-                                                                            tv_noresult.setVisibility(View.VISIBLE);
+                                                                            if(getSnapshots().size() < 1){
+                                                                                tv_noresult.setVisibility(View.VISIBLE);
+                                                                            }
+
+                                                                            notifyDataSetChanged();
+                                                                            actionMode.finish();
+                                                                        }else{
+                                                                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                                                         }
-
-                                                                        notifyDataSetChanged();
-                                                                        actionMode.finish();
-                                                                    }else{
-                                                                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                                                     }
-                                                                }
-                                                            });
+                                                                });
+                                                    }else {
+                                                        progressDialog.dismiss();
+                                                        writeBatch.commit();
+                                                        Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                                                        counter = 0;
+                                                        selectList.clear();
+
+                                                        if(getSnapshots().size() < 1){
+                                                            tv_noresult.setVisibility(View.VISIBLE);
+                                                        }
+
+                                                        notifyDataSetChanged();
+                                                        actionMode.finish();
+                                                    }
                                                 }
                                             })
                                             .setNegativeButton("Cancel", null)
@@ -335,21 +357,29 @@ public class MonitoringAdapter extends FirestoreRecyclerAdapter<Monitoring, Moni
                                 progressDialog.create();
                                 progressDialog.show();
 
-                                db.collection("Monitoring").document(model.getId()).delete()
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                progressDialog.dismiss();
+                                if(helper.isConnected()) {
+                                    db.collection("Monitoring").document(model.getId()).delete()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    progressDialog.dismiss();
 
-                                                if(task.isSuccessful()){
-                                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
-                                                    notifyDataSetChanged();
-                                                    dialog.dismiss();
-                                                }else{
-                                                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                                                        notifyDataSetChanged();
+                                                        dialog.dismiss();
+                                                    }else{
+                                                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
+                                } else {
+                                    progressDialog.dismiss();
+                                    db.collection("Monitoring").document(model.getId()).delete();
+                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                                    notifyDataSetChanged();
+                                    dialog.dismiss();
+                                }
                             }
                         })
                         .setNegativeButton("Cancel", null)

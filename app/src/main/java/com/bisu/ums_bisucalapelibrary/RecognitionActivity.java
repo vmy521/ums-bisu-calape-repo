@@ -734,6 +734,12 @@ public class RecognitionActivity extends AppCompatActivity {
             return;
         }
 
+        if(!helper.isConnected()) {
+            progressDialog.hide();
+            Toast.makeText(this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         tv_result.setVisibility(View.INVISIBLE);
         progressDialog.dismiss();
 
@@ -761,7 +767,9 @@ public class RecognitionActivity extends AppCompatActivity {
 
                         if(task.isSuccessful()){
                             String time = helper.formatDate(new Date());
-                            showSuccessMsgDialog("Time In Success", time);
+                            if(!isFinishing()) {
+                                showSuccessMsgDialog("Time In Success", time);
+                            }
                         }else{
                             Toast.makeText(RecognitionActivity.this, "Time In Failed", Toast.LENGTH_SHORT).show();
                             Log.e("App Error", task.getException().getMessage());
@@ -771,6 +779,12 @@ public class RecognitionActivity extends AppCompatActivity {
     }
 
     private void timeOut(Monitoring monitoring) {
+        if(!helper.isConnected()) {
+            progressDialog.hide();
+            Toast.makeText(this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressDialog.dismiss();
 
         Map<String, Object> map = new HashMap<>();
@@ -786,7 +800,9 @@ public class RecognitionActivity extends AppCompatActivity {
 
                         if(task.isSuccessful()){
                             String time = helper.formatDate(new Date());
-                            showSuccessMsgDialog("Time Out Success", time);
+                            if(!isFinishing()) {
+                                showSuccessMsgDialog("Time Out Success", time);
+                            }
                         }else{
                             Toast.makeText(RecognitionActivity.this, "Time Out Failed", Toast.LENGTH_SHORT).show();
                             Log.e("App Error", task.getException().getMessage());
