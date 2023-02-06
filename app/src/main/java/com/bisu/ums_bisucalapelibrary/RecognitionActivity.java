@@ -525,6 +525,15 @@ public class RecognitionActivity extends AppCompatActivity {
     }
 
     public void recognizeImage(final Bitmap bitmap) {
+        if(!helper.isConnected()) {
+            tv_result.setText("No internet connection");
+            tv_result.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        tv_result.setText("");
+        tv_result.setVisibility(View.INVISIBLE);
+
         // set Face to Preview
         //face_preview.setImageBitmap(bitmap);
 
@@ -582,7 +591,9 @@ public class RecognitionActivity extends AppCompatActivity {
                 //If distance between Closest found face is more than 1.000 ,then output UNKNOWN face.
                 if(distance_local < distance){
                     //Load user details from Firestore
-                    db.collection("User").document(userId).get()
+                    db.collection("User")
+                            .document(userId)
+                            .get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(Task<DocumentSnapshot> task) {
@@ -599,7 +610,7 @@ public class RecognitionActivity extends AppCompatActivity {
                                     tv_fullname.setText(user.getFullName());
                                     tv_gender.setText(user.getGender());
                                     tv_bdate.setText(helper.formatDate(user.getBdate()));
-                                    tv_course.setText(user.getCourse() );
+                                    tv_course.setText(user.getCourse());
 
                                     //Check if user has time in already
                                     Query query = db.collection("Monitoring")
@@ -725,8 +736,15 @@ public class RecognitionActivity extends AppCompatActivity {
     }
 
     private void timeIn(User user) {
+        progressDialog.setTitle("Saving Time In");
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.create();
+        progressDialog.show();
+
         //Check if purpose of visit is not null
         if(purposeVisit == null){
+            progressDialog.hide();
             start = true;
             tv_result.setVisibility(View.VISIBLE);
             tv_result.setBackgroundColor(getResources().getColor(R.color.red));
@@ -734,14 +752,7 @@ public class RecognitionActivity extends AppCompatActivity {
             return;
         }
 
-        if(!helper.isConnected()) {
-            progressDialog.hide();
-            Toast.makeText(this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         tv_result.setVisibility(View.INVISIBLE);
-        progressDialog.dismiss();
 
         Map<String, Object> map = new HashMap<>();
         map.put("userId", user.getId());
@@ -779,13 +790,11 @@ public class RecognitionActivity extends AppCompatActivity {
     }
 
     private void timeOut(Monitoring monitoring) {
-        if(!helper.isConnected()) {
-            progressDialog.hide();
-            Toast.makeText(this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        progressDialog.dismiss();
+        progressDialog.setTitle("Saving Time Out");
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.create();
+        progressDialog.show();
 
         Map<String, Object> map = new HashMap<>();
         map.put("timeOut", FieldValue.serverTimestamp());
